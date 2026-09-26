@@ -1,6 +1,9 @@
 # Halo Swipe
 
 <p>
+  <a href="https://apps.repebble.com/dc3358b00af54f069f14d883"><img src="https://img.shields.io/static/v1?label=App%20Listing&message=%20&logoColor=white&color=833FD6&style=flat"/></a>
+  <a href="https://developer.repebble.com/dashboard/"><img src="https://img.shields.io/static/v1?label=Pebble%20Developer%20Portal&message=%20&logoColor=white&color=FC6251&style=flat"/></a> * 
+  <a href="https://github.com/thementalgoose/pebble-halo-swipe/releases"><img src="https://img.shields.io/github/v/release/thementalgoose/pebble-halo-swipe"/></a> 
 </p>
 
 Simple pebble watchface inspired by the OG Time 2 kickstarter videos
