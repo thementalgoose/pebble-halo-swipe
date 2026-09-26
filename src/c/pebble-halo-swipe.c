@@ -56,9 +56,8 @@ static void draw_background_halo(GContext *ctx, GPoint center) {
     HALO_RADIUS * 2
   );
 
-  graphics_context_set_stroke_width(ctx, HALO_WIDTH);
-  graphics_context_set_stroke_color(ctx, COLOR_BACKGROUND_HALO);
-  graphics_draw_arc(ctx, halo_rect, GOvalScaleModeFitCircle, 0, TRIG_MAX_ANGLE);
+  graphics_context_set_fill_color(ctx, COLOR_BACKGROUND_HALO);
+  graphics_fill_radial(ctx, halo_rect, GOvalScaleModeFitCircle, HALO_WIDTH, 0, TRIG_MAX_ANGLE);
 }
 
 // ---------------------------------------------------------------------------
@@ -76,9 +75,8 @@ static void draw_halo(GContext *ctx, GPoint center, struct tm *tick_time) {
       HALO_RADIUS * 2
     );
 
-    graphics_context_set_stroke_width(ctx, HALO_WIDTH);
-    graphics_context_set_stroke_color(ctx, COLOR_HALO);
-    graphics_draw_arc(ctx, halo_rect, GOvalScaleModeFitCircle, 0, minute_angle);
+    graphics_context_set_fill_color(ctx, COLOR_HALO);
+    graphics_fill_radial(ctx, halo_rect, GOvalScaleModeFitCircle, HALO_WIDTH, 0, minute_angle);
   }
 }
 
