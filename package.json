@@ -1,0 +1,37 @@
+{
+  "name": "Halo Swipe",
+  "author": "thementalgoose",
+  "version": "1.0.0",
+  "keywords": ["pebble-app"],
+  "private": true,
+  "dependencies": {
+    "@rebble/clay": "^1.0.8"
+  },
+  "pebble": {
+    "displayName": "Halo Swipe",
+    "uuid": "4986c9ee-8cd1-4a63-9d4f-2eee1e7b8e82",
+    "sdkVersion": "3",
+    "enableMultiJS": true,
+    "capabilities": [ 
+      "health" 
+    ],
+    "targetPlatforms": [
+      "aplite",
+      "basalt",
+      "chalk",
+      "diorite",
+      "emery",
+      "flint",
+      "gabbro"
+    ],
+    "watchapp": {
+      "watchface": true
+    },
+    "messageKeys": [
+      "dummy"
+    ],
+    "resources": {
+      "media": []
+    }
+  }
+}
