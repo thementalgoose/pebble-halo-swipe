@@ -372,6 +372,21 @@ static void canvas_update_proc(Layer *layer, GContext *ctx) {
   time_t now = time(NULL);
   struct tm *tick_time = localtime(&now);
 
+#if SCREENSHOTS
+  static struct tm screenshot_time = {
+    .tm_sec   = 0,
+    .tm_min   = 20,
+    .tm_hour  = 10,
+    .tm_mday  = 6,
+    .tm_mon   = 8,   // September (0-indexed)
+    .tm_year  = 126, // 2026 (years since 1900)
+    .tm_wday  = 0,   // Sunday
+    .tm_yday  = 248,
+    .tm_isdst = -1
+  };
+  tick_time = &screenshot_time;
+#endif
+
   GRect bounds = layer_get_bounds(layer);
   GPoint center = grect_center_point(&bounds);
 

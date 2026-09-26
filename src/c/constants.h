@@ -73,3 +73,12 @@
 #else
   #define FONT_KEY_DATA           FONT_KEY_GOTHIC_24_BOLD
 #endif
+
+// ===========================================================================
+// Screenshot Configuration
+// Set SCREENSHOTS to 1 (e.g. via build flag or generate_screenshots.sh) to freeze time/date.
+// ===========================================================================
+#ifndef SCREENSHOTS
+  #define SCREENSHOTS 0
+#endif
+
