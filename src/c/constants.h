@@ -10,8 +10,7 @@
 // Halo: Around the watchface, clipped to the end of the minute hand
 // ===========================================================================
 
-#if defined(PBL_PLATFORM_EMERY) || defined(PBL_PLATFORM_GABBRO)
-// Large displays (Emery: 200x228, Gabbro: 228x228)
+#if defined(PBL_PLATFORM_EMERY) 
 #define CENTER_CIRCLE_RADIUS    7
 #define HOUR_HAND_LENGTH        52
 #define HOUR_HAND_WIDTH         6
@@ -20,14 +19,23 @@
 #define HALO_RADIUS             96
 #define HALO_WIDTH              16
 
+#elif defined(PBL_PLATFORM_GABBRO)
+#define CENTER_CIRCLE_RADIUS    7
+#define HOUR_HAND_LENGTH        52
+#define HOUR_HAND_WIDTH         6
+#define MINUTE_HAND_LENGTH      125
+#define MINUTE_HAND_WIDTH       2
+#define HALO_RADIUS             110
+#define HALO_WIDTH              16
+
 #elif defined(PBL_PLATFORM_CHALK)
 // Round display (Chalk: 180x180)
 #define CENTER_CIRCLE_RADIUS    6
 #define HOUR_HAND_LENGTH        45
 #define HOUR_HAND_WIDTH         7
-#define MINUTE_HAND_LENGTH      75
+#define MINUTE_HAND_LENGTH      80
 #define MINUTE_HAND_WIDTH       2
-#define HALO_RADIUS             MINUTE_HAND_LENGTH
+#define HALO_RADIUS             74
 #define HALO_WIDTH              10
 
 #else
@@ -35,9 +43,9 @@
 #define CENTER_CIRCLE_RADIUS    5
 #define HOUR_HAND_LENGTH        38
 #define HOUR_HAND_WIDTH         6
-#define MINUTE_HAND_LENGTH      64
+#define MINUTE_HAND_LENGTH      68
 #define MINUTE_HAND_WIDTH       2
-#define HALO_RADIUS             MINUTE_HAND_LENGTH
+#define HALO_RADIUS             62
 #define HALO_WIDTH              8
 
 #endif
