@@ -336,6 +336,12 @@ static void draw_date(GContext *ctx, GPoint center, struct tm *tick_time) {
     strftime(date_text, sizeof(date_text), "%d %b", tick_time);
   }
 
+  for (char *p = date_text; *p; ++p) {
+    if (*p >= 'a' && *p <= 'z') {
+      *p -= ('a' - 'A');
+    }
+  }
+
   GFont font = fonts_get_system_font(FONT_KEY_DATA);
   GSize text_size = graphics_text_layout_get_content_size(
     date_text, font, GRect(0, 0, 100, 30), GTextOverflowModeFill, GTextAlignmentCenter
