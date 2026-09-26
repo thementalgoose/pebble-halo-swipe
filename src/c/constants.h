@@ -68,7 +68,11 @@
 // ===========================================================================
 // Configurable Fonts
 // ===========================================================================
-#define FONT_KEY_DATA           FONT_KEY_LECO_20_BOLD_NUMBERS
+#if defined(PBL_PLATFORM_EMERY) || defined(PBL_PLATFORM_GABBRO)
+  #define FONT_KEY_DATA           FONT_KEY_LECO_20_BOLD_NUMBERS
+#else
+  #define FONT_KEY_DATA           FONT_KEY_GOTHIC_24_BOLD
+#endif
 
 // ===========================================================================
 // Debug Time Configuration
@@ -77,7 +81,7 @@
 // ===========================================================================
 #ifdef IS_EMULATOR_BUILD
   // Emulator-only test data
-  #define DEBUG_TIME              &(struct tm){ .tm_hour = 10, .tm_min = 10 }
+  #define DEBUG_TIME              &(struct tm){ .tm_hour = 10, .tm_min = 10, .tm_year = 2026, .tm_mon = 6, or .tm_mday = 20 }
 #else
   // Production code
   #define DEBUG_TIME              NULL
