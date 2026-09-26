@@ -28,7 +28,16 @@
       "watchface": true
     },
     "messageKeys": [
-      "dummy"
+      "ColorHourHand",
+      "ColorMinuteHand",
+      "ColorMinuteHalo",
+      "ColorHaloBackground",
+      "ColorHeartRate",
+      "Data",
+      "DateFormat",
+      "ColorBackground",
+      "ColorCenterCircle",
+      "HandTailLength"
     ],
     "resources": {
       "media": []

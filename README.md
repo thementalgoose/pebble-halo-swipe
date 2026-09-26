@@ -17,11 +17,11 @@ Simple pebble watchface inspired by the OG Time 2 kickstarter videos
 
 ### Currently supported
 
-- [ ] Adaptive to all supported pebble sizes
-- [ ] Configure the color of the background halo
-- [ ] Configure the color of the minute halo
-- [ ] Configure the color of the hands individually
-- [ ] Configure the health line
+- [x] Adaptive to all supported pebble sizes
+- [x] Configure the color of the background halo
+- [x] Configure the color of the minute halo
+- [x] Configure the color of the hands individually
+- [x] Configure the health line
 
 #### Building
 
