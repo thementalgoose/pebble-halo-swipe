@@ -73,16 +73,3 @@
 #else
   #define FONT_KEY_DATA           FONT_KEY_GOTHIC_24_BOLD
 #endif
-
-// ===========================================================================
-// Debug Time Configuration
-// Set to NULL by default. When set (e.g. &(struct tm){ .tm_hour = 10, .tm_min = 10 }),
-// this fixed time will be used for time rendering instead of system time.
-// ===========================================================================
-#ifdef IS_EMULATOR_BUILD
-  // Emulator-only test data
-  #define DEBUG_TIME              &(struct tm){ .tm_hour = 10, .tm_min = 10, .tm_year = 2026, .tm_mon = 6, or .tm_mday = 20 }
-#else
-  // Production code
-  #define DEBUG_TIME              NULL
-#endif
