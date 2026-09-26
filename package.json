@@ -31,7 +31,8 @@
       "ColorHourHand",
       "ColorMinuteHand",
       "ColorMinuteHalo",
-      "ColorHaloBackground"
+      "ColorHaloBackground",
+      "ColorHeartRate"
     ],
     "resources": {
       "media": []

@@ -51,4 +51,5 @@
 #define COLOR_HOUR_HAND         GColorWhite
 #define COLOR_MINUTE_HAND       GColorWhite
 #define COLOR_MINUTE_HALO       GColorWhite
+#define COLOR_HEART_RATE        GColorWhite
 #define COLOR_HALO              COLOR_MINUTE_HALO

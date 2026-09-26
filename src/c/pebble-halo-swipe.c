@@ -3,6 +3,21 @@
 
 static Window *s_window;
 static Layer  *s_canvas_layer;
+static GPath  *s_heart_path = NULL;
+
+static const GPathInfo HEART_PATH_INFO = {
+  .num_points = 8,
+  .points = (GPoint []) {
+    {0, -2},
+    {-2, -4},
+    {-5, -2},
+    {-5, 1},
+    {0, 5},
+    {5, 1},
+    {5, -2},
+    {2, -4}
+  }
+};
 
 // ---------------------------------------------------------------------------
 // Settings (persisted via AppMessage from Clay)
@@ -12,11 +27,15 @@ static Layer  *s_canvas_layer;
 #define PERSIST_KEY_MINUTE_HAND     2
 #define PERSIST_KEY_MINUTE_HALO     3
 #define PERSIST_KEY_HALO_BACKGROUND 4
+#define PERSIST_KEY_HEART_RATE      5
 
 static GColor s_color_hour_hand;
 static GColor s_color_minute_hand;
 static GColor s_color_minute_halo;
 static GColor s_color_halo_background;
+static GColor s_color_heart_rate;
+
+static int s_heart_rate = 0;
 
 static void load_settings(void) {
   s_color_hour_hand       = persist_exists(PERSIST_KEY_HOUR_HAND)
@@ -31,6 +50,9 @@ static void load_settings(void) {
   s_color_halo_background = persist_exists(PERSIST_KEY_HALO_BACKGROUND)
     ? GColorFromHEX(persist_read_int(PERSIST_KEY_HALO_BACKGROUND))
     : COLOR_BACKGROUND_HALO;
+  s_color_heart_rate      = persist_exists(PERSIST_KEY_HEART_RATE)
+    ? GColorFromHEX(persist_read_int(PERSIST_KEY_HEART_RATE))
+    : COLOR_HEART_RATE;
 }
 
 static void inbox_received_handler(DictionaryIterator *iter, void *context) {
@@ -56,10 +78,27 @@ static void inbox_received_handler(DictionaryIterator *iter, void *context) {
     persist_write_int(PERSIST_KEY_HALO_BACKGROUND, t->value->int32);
   }
 
+  t = dict_find(iter, MESSAGE_KEY_ColorHeartRate);
+  if (t) {
+    persist_write_int(PERSIST_KEY_HEART_RATE, t->value->int32);
+  }
+
   load_settings();
 
   if (s_canvas_layer) {
     layer_mark_dirty(s_canvas_layer);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Pebble Health Handler
+// ---------------------------------------------------------------------------
+static void health_handler(HealthEventType event, void *context) {
+  if (event == HealthEventHeartRateUpdate || event == HealthEventSignificantUpdate) {
+    s_heart_rate = (int)health_service_peek_current_value(HealthMetricHeartRateBPM);
+    if (s_canvas_layer) {
+      layer_mark_dirty(s_canvas_layer);
+    }
   }
 }
 
@@ -140,6 +179,51 @@ static void draw_halo(GContext *ctx, GPoint center, struct tm *tick_time) {
 }
 
 // ---------------------------------------------------------------------------
+// Heart Rate Display (printed underneath middle of clock and within halo)
+// ---------------------------------------------------------------------------
+static void draw_heart_rate(GContext *ctx, GPoint center) {
+  if (!s_heart_path) {
+    return;
+  }
+
+  char hr_text[16];
+  if (s_heart_rate > 0) {
+    snprintf(hr_text, sizeof(hr_text), "%d", s_heart_rate);
+  } else {
+    snprintf(hr_text, sizeof(hr_text), "--");
+  }
+
+  GFont font = fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD);
+  GSize text_size = graphics_text_layout_get_content_size(
+    hr_text, font, GRect(0, 0, 100, 30), GTextOverflowModeFill, GTextAlignmentLeft
+  );
+
+  int heart_width = 11;
+  int gap = 4;
+  int total_width = heart_width + gap + text_size.w;
+
+  int start_x = center.x - (total_width / 2);
+  int heart_y = center.y + (HALO_RADIUS * 4 / 9);
+
+  // Position heart path
+  gpath_move_to(s_heart_path, GPoint(start_x + (heart_width / 2), heart_y));
+
+  // Draw heart icon
+  graphics_context_set_fill_color(ctx, s_color_heart_rate);
+  gpath_draw_filled(ctx, s_heart_path);
+
+  // Draw text
+  graphics_context_set_text_color(ctx, s_color_heart_rate);
+  GRect text_rect = GRect(
+    start_x + heart_width + gap,
+    heart_y - (text_size.h / 2) - 1,
+    text_size.w + 4,
+    text_size.h
+  );
+  graphics_draw_text(ctx, hr_text, font, text_rect, GTextOverflowModeFill, GTextAlignmentLeft, NULL);
+}
+
+// ---------------------------------------------------------------------------
 // Canvas Update Procedure
 // ---------------------------------------------------------------------------
 static void canvas_update_proc(Layer *layer, GContext *ctx) {
@@ -160,6 +244,9 @@ static void canvas_update_proc(Layer *layer, GContext *ctx) {
 
   // Draw Minute Halo around watchface, clipped to the end of the minute hand
   draw_halo(ctx, center, tick_time);
+
+  // Draw Heart Rate (underneath middle of clock and within halo)
+  draw_heart_rate(ctx, center);
 
   // Draw Component 2: Hour Hand (small and wide)
   draw_hour_hand(ctx, center, tick_time);
@@ -187,12 +274,18 @@ static void window_load(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
 
+  s_heart_path = gpath_create(&HEART_PATH_INFO);
+
   s_canvas_layer = layer_create(bounds);
   layer_set_update_proc(s_canvas_layer, canvas_update_proc);
   layer_add_child(window_layer, s_canvas_layer);
 }
 
 static void window_unload(Window *window) {
+  if (s_heart_path) {
+    gpath_destroy(s_heart_path);
+    s_heart_path = NULL;
+  }
   layer_destroy(s_canvas_layer);
   s_canvas_layer = NULL;
 }
@@ -214,10 +307,14 @@ static void init(void) {
   });
   window_stack_push(s_window, true);
 
+  health_service_events_subscribe(health_handler, NULL);
+  s_heart_rate = (int)health_service_peek_current_value(HealthMetricHeartRateBPM);
+
   tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
 }
 
 static void deinit(void) {
+  health_service_events_unsubscribe();
   tick_timer_service_unsubscribe();
   window_destroy(s_window);
 }
@@ -227,4 +324,3 @@ int main(void) {
   app_event_loop();
   deinit();
 }
-

@@ -92,6 +92,32 @@ module.exports = [
     ]
   },
   {
+    "type": "section",
+    "items": [
+      {
+        "type": "heading",
+        "defaultValue": "Heart Rate"
+      },
+      {
+        "type": "color",
+        "messageKey": "ColorHeartRate",
+        "label": "Heart Rate",
+        "defaultValue": "FFFFFF",
+        "sunlight": true,
+        "capabilities": ["COLOR"]
+      },
+      {
+        "type": "color",
+        "messageKey": "ColorHeartRate",
+        "label": "Heart Rate",
+        "defaultValue": "FFFFFF",
+        "sunlight": false,
+        "layout": "BLACK_WHITE",
+        "capabilities": ["BW"]
+      }
+    ]
+  },
+  {
     "type": "submit",
     "defaultValue": "Save"
   }
