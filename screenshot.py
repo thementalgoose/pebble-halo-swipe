@@ -21,6 +21,7 @@ import json
 import subprocess
 import sys
 import time
+import os
 from pathlib import Path
 
 VALID_BUTTONS = {"back", "up", "select", "down"}
@@ -28,9 +29,13 @@ VALID_EMULATORS = {"aplite", "basalt", "chalk", "diorite", "emery", "flint", "ga
 PROJECT_DIR = Path(__file__).parent
 
 
-def run(cmd, check=True):
+def run(cmd, check=True, env=None):
     print(f"  $ {' '.join(cmd)}")
-    result = subprocess.run(cmd, cwd=PROJECT_DIR)
+    run_env = os.environ.copy()
+    run_env["IS_EMULATOR_BUILD"] = "1"
+    if env:
+        run_env.update(env)
+    result = subprocess.run(cmd, cwd=PROJECT_DIR, env=run_env)
     if check and result.returncode != 0:
         print(f"Command failed with exit code {result.returncode}", file=sys.stderr)
         sys.exit(result.returncode)
@@ -157,6 +162,8 @@ def main():
     )
     args = parser.parse_args()
 
+    os.environ["IS_EMULATOR_BUILD"] = "1"
+
     steps = parse_steps(args.steps)
 
     # --- Build ---
@@ -172,6 +179,12 @@ def main():
     if args.vnc:
         install_cmd.append("--vnc")
     run(install_cmd)
+
+    # --- Set Emulator Time ---
+    set_time_cmd = ["pebble", "emu-set-time", "--emulator", args.emulator, "10:10:00"]
+    if args.vnc:
+        set_time_cmd.append("--vnc")
+    run(set_time_cmd, check=False)
 
     # --- Steps ---
     if steps:

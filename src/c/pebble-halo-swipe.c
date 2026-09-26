@@ -370,7 +370,10 @@ static void draw_bottom_data(GContext *ctx, GPoint center, struct tm *tick_time)
 // ---------------------------------------------------------------------------
 static void canvas_update_proc(Layer *layer, GContext *ctx) {
   time_t now = time(NULL);
-  struct tm *tick_time = localtime(&now);
+  struct tm *tick_time = DEBUG_TIME;
+  if (!tick_time) {
+    tick_time = localtime(&now);
+  }
 
   GRect bounds = layer_get_bounds(layer);
   GPoint center = grect_center_point(&bounds);
