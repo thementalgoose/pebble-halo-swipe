@@ -14,11 +14,11 @@
 // Large displays (Emery: 200x228, Gabbro: 228x228)
 #define CENTER_CIRCLE_RADIUS    7
 #define HOUR_HAND_LENGTH        52
-#define HOUR_HAND_WIDTH         8
-#define MINUTE_HAND_LENGTH      85
+#define HOUR_HAND_WIDTH         6
+#define MINUTE_HAND_LENGTH      100
 #define MINUTE_HAND_WIDTH       2
-#define HALO_RADIUS             MINUTE_HAND_LENGTH
-#define HALO_WIDTH              12
+#define HALO_RADIUS             96
+#define HALO_WIDTH              16
 
 #elif defined(PBL_PLATFORM_CHALK)
 // Round display (Chalk: 180x180)
@@ -45,6 +45,16 @@
 // ===========================================================================
 // Configurable Colors
 // ===========================================================================
+#if defined(PBL_COLOR)
+#define COLOR_BACKGROUND        GColorBlack
+#define COLOR_BACKGROUND_HALO   GColorPictonBlue
+#define COLOR_CENTER_CIRCLE     GColorWhite
+#define COLOR_HOUR_HAND         GColorLightGray
+#define COLOR_MINUTE_HAND       GColorWhite
+#define COLOR_MINUTE_HALO       GColorWhite
+#define COLOR_HEART_RATE        GColorWhite
+#define COLOR_HALO              COLOR_MINUTE_HALO
+#else
 #define COLOR_BACKGROUND        GColorBlack
 #define COLOR_BACKGROUND_HALO   GColorDarkGray
 #define COLOR_CENTER_CIRCLE     GColorWhite
@@ -53,3 +63,9 @@
 #define COLOR_MINUTE_HALO       GColorWhite
 #define COLOR_HEART_RATE        GColorWhite
 #define COLOR_HALO              COLOR_MINUTE_HALO
+#endif
+
+// ===========================================================================
+// Configurable Fonts
+// ===========================================================================
+#define FONT_KEY_DATA           FONT_KEY_LECO_20_BOLD_NUMBERS

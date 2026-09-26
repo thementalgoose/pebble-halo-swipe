@@ -32,7 +32,12 @@
       "ColorMinuteHand",
       "ColorMinuteHalo",
       "ColorHaloBackground",
-      "ColorHeartRate"
+      "ColorHeartRate",
+      "Data",
+      "DateFormat",
+      "ColorBackground",
+      "ColorCenterCircle",
+      "HandTailLength"
     ],
     "resources": {
       "media": []
